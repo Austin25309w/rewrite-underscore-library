@@ -332,8 +332,33 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-
-    return func;
+    var calledArgs = [];
+    var beenCalled = false;
+    var result;
+    return function() {
+      var i = 0;
+      var j = 0;
+    var arguments1 = [];
+      _.each(arguments, function(item) {
+        arguments1.push(item);
+      })   
+      for (i=0; i<calledArgs.length; i++) {
+        beenCalled = true
+        for (j=0; j<calledArgs[i].length; j++) {
+          if (arguments1[j] !== calledArgs[i][0][j]) {
+            beenCalled = false;
+          }
+        }    
+      };
+      if (!beenCalled) {
+      result = func.apply(this, arguments1);     
+      calledArgs.push([arguments1, result]);
+      return result;
+      }
+      else {
+        return calledArgs[0][1]
+      }
+  }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -372,10 +397,12 @@
     var shuffled = [];
     var i = 0;
     for (i=0; i<copy.length; i++) {
-      var random = Math.floor(Math.random() * copy.length)
       var putIn = function() {
+      var random = Math.floor(Math.random() * copy.length)  
+      console.log(random);            
         if (!Boolean(shuffled[random])) {
-        shuffled.push(copy[i]);
+        shuffled[random] = copy[i];
+        console.log(shuffled);
       }
       else {
         putIn();
