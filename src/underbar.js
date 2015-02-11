@@ -106,13 +106,16 @@
     var results = [];
     var match = "";
     _.each(array, function(item) {
-      if (item !== match) {
-        results.push(item + " " + match);
-        match = item;
-      }
-      else {
-        match = item;
-      }
+      var noMatch = true;
+      _.each(results, function(result) {
+        if (item === result) {
+          noMatch = false
+        }
+        match = result;
+        })
+      if (noMatch === true) {
+          results.push(item);
+        }
     })
     return results;
   };
@@ -213,11 +216,17 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+
     return _.reduce(collection, function(a, b) {
       if (!a) {
         return false;
       }
-      return iterator(b) === true;
+      if (iterator) {
+        return Boolean(iterator(b));
+      }
+      else {
+        return Boolean(b);
+      }
     }, true)
   };
 
@@ -225,7 +234,19 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
-    return (!_.every(collection, iterator))
+    var passed = false
+    _.each(collection, function(item) {
+      if (iterator) {
+        if (Boolean(iterator(item)) === true) {
+          passed = true;
+        }
+      } else {
+        if (Boolean(item) === true) {
+          passed = true;
+        }
+      }
+      })
+      return passed;   
   };
 
 
@@ -311,6 +332,8 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+
+    return func;
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -320,11 +343,15 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = arguments;
+
     setTimeout(function() {
       var i = 0;
-      for (i=2; i<arguments.length; i++) {
-        var arguments1 = arguments[i];
+      var arguments1 = [];
+      for (i=2; i<args.length; i++) {
+        arguments1[i-2] = args[i];
       }
+      console.log(arguments1)
       func.apply(this, arguments1)
     },wait)
   };
@@ -341,6 +368,22 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var copy = array.slice(0,array.length)
+    var shuffled = [];
+    var i = 0;
+    for (i=0; i<copy.length; i++) {
+      var random = Math.floor(Math.random() * copy.length)
+      var putIn = function() {
+        if (!Boolean(shuffled[random])) {
+        shuffled.push(copy[i]);
+      }
+      else {
+        putIn();
+      }
+      }
+      putIn()
+    }
+    return shuffled;
   };
 
 
