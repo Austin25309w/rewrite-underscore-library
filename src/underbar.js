@@ -328,33 +328,26 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-    var calledArgs = [];
+    var calledArguments = [];
     var beenCalled = false;
     var result;
+
     return function() {
-      var i = 0;
-      var j = 0;
-      var arguments1 = [];
-      _.each(arguments, function(item) {
-        arguments1.push(item);
-      })   
-      for (i=0; i<calledArgs.length; i++) {
-        beenCalled = true
-        for (j=0; j<calledArgs[i].length; j++) {
-          if (arguments1[j] !== calledArgs[i][0][j]) {
-            beenCalled = false;
+      var args = Array.prototype.slice.call(arguments);
+
+      _.each(calledArguments, function(calledArgument) {
+          if (args.join() === calledArgument[0].join()) {
+            beenCalled = true;
+            return calledArgument[1];
           }
-        }    
-      };
+      });
+
       if (!beenCalled) {
-      result = func.apply(this, arguments1);     
-      calledArgs.push([arguments1, result]);
+      result = func.apply(this, arguments);     
+      calledArguments.push([args, result]);
       return result;
       }
-      else {
-        return calledArgs[0][1]
-      }
-  }
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -372,9 +365,8 @@
       for (i=2; i<args.length; i++) {
         arguments1[i-2] = args[i];
       }
-      console.log(arguments1)
       func.apply(this, arguments1)
-    },wait)
+    },wait);
   };
 
 
@@ -389,23 +381,21 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
-    var copy = array.slice(0,array.length)
+    var arrayCopy = array.slice(0,array.length);
     var shuffled = [];
-    var i = 0;
-    for (i=0; i<copy.length; i++) {
-      var putIn = function() {
-      var random = Math.floor(Math.random() * copy.length)  
-      console.log(random);            
-        if (!Boolean(shuffled[random])) {
-        shuffled[random] = copy[i];
-        console.log(shuffled);
-      }
-      else {
-        putIn();
-      }
-      }
-      putIn()
-    }
+
+    _.each(arrayCopy, function(item) {
+      var intoRandomSpot = function() {
+        var randomSpot = Math.floor(Math.random() * arrayCopy.length);
+        
+        if (!Boolean(shuffled[randomSpot])) {
+        shuffled[randomSpot] = item;
+        } else {
+        intoRandomSpot();
+        }
+      };
+      intoRandomSpot()
+    });
     return shuffled;
   };
 
