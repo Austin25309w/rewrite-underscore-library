@@ -243,8 +243,8 @@
           passed = true;
         }
       }
-      })
-      return passed;   
+    });
+    return passed;   
   };
 
 
@@ -267,28 +267,26 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
-    var i = 0;
-    for (i=1; i<arguments.length; i++) {
-      for (var key in arguments[i]) {
-        obj[key] = arguments[i][key]
+    _.each(arguments, function(item) {
+      for (var key in item) {
+        obj[key] = item[key]
       }
-    }
-    return obj
+    });
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
-    var i = 0;
-    for (i=1; i<arguments.length; i++) {
-      for (var key in arguments[i]) {
-        if (obj[key] === undefined)
-        obj[key] = arguments[i][key]
+    _.each(arguments, function(item) {
+      for (var key in item) {
+        if (obj[key] === undefined) {
+          obj[key] = item[key]
+        }
       }
-    }
-    return obj
+    });
+    return obj;
   };
-
 
   /**
    * FUNCTIONS
@@ -336,7 +334,7 @@
     return function() {
       var i = 0;
       var j = 0;
-    var arguments1 = [];
+      var arguments1 = [];
       _.each(arguments, function(item) {
         arguments1.push(item);
       })   
