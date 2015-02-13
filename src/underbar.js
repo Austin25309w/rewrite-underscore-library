@@ -38,10 +38,12 @@
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
-    if (n === undefined) return array[array.length-1];
-    else {
-      if (n > array.length) return array;
-      return array.slice(array.length-n, array.length)
+    if (n === undefined) {
+      return array[array.length-1];
+    } else if (n > array.length) {
+      return array;
+    } else {
+      return array.slice(array.length-n, array.length);
     }
   };
 
@@ -51,19 +53,17 @@
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
-    var i = 0;
+    var i;
     if (collection.constructor === Array) {
-    for (i=0; i<collection.length; i++) {
-      var index = i;
-      iterator(collection[i], index, collection);
-    }
-  }
-    if (collection.constructor === Object) {
+      for (i=0; i<collection.length; i++) {
+        var index = i;
+        iterator(collection[i], index, collection);
+      }
+    } else if (collection.constructor === Object) {
       for (var key in collection) {
         iterator(collection[key], key, collection);
       }
     }
-    
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
@@ -85,11 +85,13 @@
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
-    var results = [];
+    var filtered = [];
     _.each(collection, function(item) {
-      if (test(item)) results.push(item);
+      if (test(item)) {
+        filtered.push(item);
+      }
     });
-    return results;
+    return filtered;
   };
 
   // Return all elements of an array that don't pass a truth test.
@@ -97,27 +99,27 @@
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
     return _.filter(collection, function(item) {
-      if (!test(item)) return item;
-    })
+      if (!test(item)) {
+        return item;
+      }
+    });
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-    var results = [];
-    var match = "";
+    var uniqueArray = [];
     _.each(array, function(item) {
-      var noMatch = true;
-      _.each(results, function(result) {
-        if (item === result) {
-          noMatch = false
+      var isUnique = true;
+      _.each(uniqueArray, function(uniqueArrayItem) {
+        if (item === uniqueArrayItem) {
+          isUnique = false
         }
-        match = result;
-        })
-      if (noMatch === true) {
-          results.push(item);
-        }
-    })
-    return results;
+      });
+      if (isUnique === true) {
+        uniqueArray.push(item);
+      }
+    });
+    return uniqueArray;
   };
 
 
@@ -178,8 +180,7 @@
       for (i=0; i<collection.length; i++) {
         current = iterator(current, collection[i])
       }
-    }
-    else {
+    } else {
       var current = collection[0];
       for (i=1; i<collection.length; i++) {
         current = iterator(current, collection[i])
@@ -216,18 +217,15 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-
     return _.reduce(collection, function(a, b) {
       if (!a) {
         return false;
-      }
-      if (iterator) {
+      } else if (iterator) {
         return Boolean(iterator(b));
-      }
-      else {
+      } else {
         return Boolean(b);
       }
-    }, true)
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
