@@ -482,17 +482,23 @@
 
     var result = [];
 
+    _.each(argumentsArray[0], function(item) {
+        var isShared = false;
 
-
-    /*var firstArray = argumentsArray[0];
-
-    for (var i=0; i<argumentsArray.length; i++) {
-      for (var j=0; j<argumentsArray[i].length; j++) {
-        if (firstArray[i] === argumentsArray[i][j] && firstArray[i] !== undefined) {
-          result.push(firstArray[i]);
-        }
+      for (var i=1; i<argumentsArray.length; i++) {
+        _.each(argumentsArray[i], function(check) {
+          if (item === check) {
+            isShared = true;
+          }
+        });
       }
-    }*/
+
+      if (isShared) {
+        result.push(item);
+      }
+
+    });
+
     return result;
   };
 
