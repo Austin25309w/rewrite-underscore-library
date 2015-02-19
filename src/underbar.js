@@ -232,19 +232,22 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
-    var passed = false
-    _.each(collection, function(item) {
-      if (iterator) {
-        if (Boolean(iterator(item)) === true) {
-          passed = true;
-        }
-      } else {
-        if (Boolean(item) === true) {
-          passed = true;
-        }
+    var nonePassed = _.reduce(collection, function(pass, item) {
+      if (!pass) {
+        return false
       }
-    });
-    return passed;   
+      if (iterator !== undefined) {
+        return (!(Boolean(iterator(item))));
+      } else {
+        return (!item);
+      }
+    }, true)
+
+    if (nonePassed) {
+      return false;
+    } else {
+      return true;
+    } 
   };
 
 
