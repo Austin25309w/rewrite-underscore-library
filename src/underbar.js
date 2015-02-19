@@ -441,12 +441,11 @@
   _.zip = function() {
     var argumentsArray = Array.prototype.slice.call(arguments);
     var longestArray = argumentsArray.sort(function(a,b) {return b.length-a.length})[0].length;
-    
+
     var results = [];
     var resultsPrior = [];
     for (var i=0; i<longestArray; i++) {
       for (var j=0; j<argumentsArray.length; j++) {
-        console.log(argumentsArray[j]);
         resultsPrior.push(argumentsArray[j][i]);
       }
       results.push(resultsPrior);
@@ -460,11 +459,20 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
-    _.reduce(nestedArray, function(a,b) {
-      if (Array.isArray(item)) {
-        return a.concat(b);
-      }
-    })
+    var hello = [];   
+     
+    var simplify = function(array) {
+      _.each(array, function(itemToSimplify) {
+        if (typeof(itemToSimplify) === 'number') {
+          hello.push(itemToSimplify);
+        } else {
+            simplify(itemToSimplify);
+        }
+      });
+    };
+
+    simplify(nestedArray);
+    return hello;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
