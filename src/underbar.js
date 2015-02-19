@@ -440,12 +440,19 @@
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
     var argumentsArray = Array.prototype.slice.call(arguments);
-    var result = _.reduce(argumentsArray, function(a, b) {
-      if (b !== undefined) {
-      return Math.max(a.length, b.length);
+    var longestArray = argumentsArray.sort(function(a,b) {return b.length-a.length})[0].length;
+    
+    var results = [];
+    var resultsPrior = [];
+    for (var i=0; i<longestArray; i++) {
+      for (var j=0; j<argumentsArray.length; j++) {
+        console.log(argumentsArray[j]);
+        resultsPrior.push(argumentsArray[j][i]);
       }
-    }, 0);
-    console.log(result);
+      results.push(resultsPrior);
+      resultsPrior = [];
+    }
+    return results;
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
