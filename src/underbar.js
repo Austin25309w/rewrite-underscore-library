@@ -460,7 +460,7 @@
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
     var hello = [];   
-     
+
     var simplify = function(array) {
       _.each(array, function(itemToSimplify) {
         if (typeof(itemToSimplify) === 'number') {
@@ -478,11 +478,48 @@
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+    var argumentsArray = Array.prototype.slice.call(arguments);
+
+    var result = [];
+
+
+
+    /*var firstArray = argumentsArray[0];
+
+    for (var i=0; i<argumentsArray.length; i++) {
+      for (var j=0; j<argumentsArray[i].length; j++) {
+        if (firstArray[i] === argumentsArray[i][j] && firstArray[i] !== undefined) {
+          result.push(firstArray[i]);
+        }
+      }
+    }*/
+    return result;
   };
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var argumentsArray = Array.prototype.slice.call(arguments);
+    var results = [];
+
+    _.each(array, function(item) {
+      var isUnique = true
+
+      for (var i=1; i<argumentsArray.length; i++) {
+        for (var j=0; j<argumentsArray[i].length; j++) {
+          if (item === argumentsArray[i][j]) {
+            isUnique = false;
+          }
+        }
+      }
+
+      if (isUnique) {
+        results.push(item);
+      }
+
+    });
+
+    return results;
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
