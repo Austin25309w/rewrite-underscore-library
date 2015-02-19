@@ -414,6 +414,11 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    if (typeof(functionOrKey === 'function')) {
+      return _.map(collection, function(item) {
+        return item.functionOrKey();
+      })
+    }
   };
 
   // Sort the object's values by a criterion produced by an iterator.
@@ -421,6 +426,11 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    if (typeof(iterator) === 'function') {
+      return collection.sort(function(a,b) {return iterator(a)-iterator(b)});
+    } else {
+      return collection.sort(function(a,b) {return a[iterator]-b[iterator]});
+    }
   };
 
   // Zip together two or more arrays with elements of the same index
@@ -429,6 +439,13 @@
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
+    var argumentsArray = Array.prototype.slice.call(arguments);
+    var result = _.reduce(argumentsArray, function(a, b) {
+      if (b !== undefined) {
+      return Math.max(a.length, b.length);
+      }
+    }, 0);
+    console.log(result);
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
@@ -436,6 +453,11 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+    _.reduce(nestedArray, function(a,b) {
+      if (Array.isArray(item)) {
+        return a.concat(b);
+      }
+    })
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
