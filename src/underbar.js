@@ -331,24 +331,17 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-    var calledArguments = [];
-    var beenCalled = false;
-    var result;
+    var storage = {};
 
     return function() {
       var args = Array.prototype.slice.call(arguments);
-
-      _.each(calledArguments, function(calledArgument) {
-          if (args.join() === calledArgument[0].join()) {
-            beenCalled = true;
-            return calledArgument[1];
-          }
-      });
-
-      if (!beenCalled) {
-      result = func.apply(this, arguments);     
-      calledArguments.push([args, result]);
-      return result;
+      var argsString = args.toString();
+      if (storage[argsString] !== undefined) {
+        return storage[argsString];
+      } else {
+        var result = func.apply(this, arguments);
+        storage[argsString] = result;
+        return result;
       }
     };
   };
@@ -416,7 +409,7 @@
   _.invoke = function(collection, functionOrKey, args) {
     if (typeof(functionOrKey === 'function')) {
       return _.map(collection, function(item) {
-        return item.functionOrKey();
+        console.log(functionOrKey.apply(this, item));
       })
     }
   };
