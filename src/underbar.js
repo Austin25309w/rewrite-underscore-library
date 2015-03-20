@@ -237,11 +237,11 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
-    for (var i=1; i<arguments.length; i++) {
-      for (var key in arguments[i]) {
-        obj[key] = arguments[i][key];
-      }
-    }
+    _.each(arguments, function(argObject) {
+      _.each(argObject, function(value, key) {
+        obj[key] = value;
+      });
+    });
     return obj;
   };
 
