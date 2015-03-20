@@ -363,7 +363,6 @@
       shuffled.push(arrayCopy[randomItemNumber]);
       arrayCopy.splice(randomItemNumber, 1);
     }
-    console.log(array);
     return shuffled;
   };
 
