@@ -106,19 +106,18 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-    var uniqArray = [];
+    var uniqueStorage = {};
+    var results = [];
+
     _.each(array, function(item) {
-      var isUnique = true;
-      _.each(uniqArray, function(uniqArrayItem) {
-        if (item === uniqArrayItem) {
-          isUnique = false;
-        }
-      });
-      if (isUnique === true) {
-        uniqArray.push(item);
-      }
+      uniqueStorage[item] = item;
     });
-    return uniqArray;
+
+    _.each(uniqueStorage, function(prop) {
+      results.push(prop);
+    });
+
+    return results;
   };
 
 
