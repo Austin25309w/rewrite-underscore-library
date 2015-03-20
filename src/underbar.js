@@ -44,10 +44,8 @@
   _.last = function(array, n) {
     if (n === undefined) {
       return array[array.length-1];
-    } else if (n > array.length) {
-      return array;
     } else {
-      return array.slice(array.length-n, array.length);
+      return array.slice(Math.max(0, array.length-n));
     }
   };
 
