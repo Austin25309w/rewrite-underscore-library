@@ -302,13 +302,12 @@
     var storage = {};
 
     return function() {
-      var argsString = Array.prototype.slice.call(arguments).toString();
-      if (storage.hasOwnProperty(argsString)) {
-        return storage[argsString];
-      } else {
-        storage[argsString] = func.apply(this, arguments);
-        return storage[argsString];
+      var arg = JSON.stringify(arguments);
+      if (!storage[arg]) {
+        storage[arg] = func.apply(this, arguments);
       }
+
+      return storage[arg];
     };
   };
 
