@@ -390,14 +390,13 @@
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
-    var argumentsArray = Array.prototype.slice.call(arguments);
     var longestArray = argumentsArray.sort(function(a,b) {return b.length-a.length})[0].length;
 
     var results = [];
     var resultsPrior = [];
     for (var i=0; i<longestArray; i++) {
-      for (var j=0; j<argumentsArray.length; j++) {
-        resultsPrior.push(argumentsArray[j][i]);
+      for (var j=0; j<arguments.length; j++) {
+        resultsPrior.push(arguments[j][i]);
       }
       results.push(resultsPrior);
       resultsPrior = [];
